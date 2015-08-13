@@ -4,7 +4,7 @@
 // @description    All typing / no multiple choice when doing Memrise typing courses
 // @match          http://www.memrise.com/course/*/garden/*
 // @match          http://www.memrise.com/garden/review/*
-// @version        0.1.0
+// @version        0.1.1
 // @updateURL      https://github.com/cooljingle/memrise-all-typing/raw/master/Memrise_All_Typing.user.js
 // @downloadURL    https://github.com/cooljingle/memrise-all-typing/raw/master/Memrise_All_Typing.user.js
 // @grant          none
@@ -74,7 +74,8 @@ $(document).ready(function() {
 
     function makeMaybeTyping(box) {
         if (box.template === "multiple_choice") {
-            box.template = MEMRISE.garden.session.box_factory.make_maybe_typing(box).template;
+            var boxCopy = jQuery.extend({}, box);
+            box.template = MEMRISE.garden.session.box_factory.make_maybe_typing(boxCopy).template;
         }
     }
 
