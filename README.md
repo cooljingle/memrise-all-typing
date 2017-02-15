@@ -13,4 +13,4 @@ Then add the script using the following link: https://github.com/cooljingle/memr
 
 After installing you can alter under which circumstances multiple choice gets replaced; instructions are in the script.
 
-If you come across any issues or have a suggestion you can leave your feedback in the forum thread: http://www.memrise.com/thread/1364557/
+If you come across any issues or have a suggestion you can leave your feedback in the forum thread: https://community.memrise.com/t/userscript-memrise-all-typing/9986
