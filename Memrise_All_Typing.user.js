@@ -4,7 +4,7 @@
 // @description    All typing / no multiple choice when doing Memrise typing courses
 // @match          https://www.memrise.com/course/*/garden/*
 // @match          https://www.memrise.com/garden/review/*
-// @version        0.1.4
+// @version        0.1.5
 // @updateURL      https://github.com/cooljingle/memrise-all-typing/raw/master/Memrise_All_Typing.user.js
 // @downloadURL    https://github.com/cooljingle/memrise-all-typing/raw/master/Memrise_All_Typing.user.js
 // @grant          none
@@ -15,9 +15,9 @@ $(document).ready(function() {
     //*****************************************************************************************************************************************************
     //MEMRISE ALL TYPING
     //-----------------------------------------------------------------------------------------------------------------------------------------------------
-    //This userscript prevents multiple choice from occuring, replacing it with a typing prompt.
-    //You can configure the extent to which this happens by clicking the 'All Typing Settings' link on the left when in a learning session.
-    //Changes you make will be saved locally on your machine.
+    // This userscript prevents multiple choice from occuring, replacing it with a typing prompt.
+    // You can configure the extent to which this happens by clicking the 'All Typing Settings' link on the left when in a learning session.
+    // Changes you make will be saved locally on your machine.
     //*****************************************************************************************************************************************************
 
     var localStorageIdentifier = "memrise-all-typing",
@@ -52,6 +52,11 @@ $(document).ready(function() {
                                     <input class='all-typing-setting' id='include-typing-disabled' type='checkbox'>
                                     <label for='include-typing-disabled'>Include Typing Disabled</label>
                                     <em style='font-size:85%'>enables typing even if typing was disabled due to <ul><li>course column set to no typing, or </li><li>official Memrise course and text > 15 characters</li></ul></em>
+                                </div>
+                                <div>
+                                    <input class='all-typing-setting' id='include-tapping' type='checkbox'>
+                                    <label for='include-tapping'>Include Tapping</label>
+                                    <em style='font-size:85%'>tapping tests will be converted to typing along with multiple choice</em>
                                 </div>
                             </div>
                         </div>
@@ -132,7 +137,7 @@ $(document).ready(function() {
     }
 
     function makeMaybeTyping(box) {
-        if (box.template === "multiple_choice") {
+        if (box.template === "multiple_choice" || (localStorageObject["include-tapping"] !== false && box.template === "tapping")) {
             var boxCopy = jQuery.extend({}, box);
             box.template = MEMRISE.garden.session.box_factory.makeMaybeTyping(boxCopy).template;
         }
