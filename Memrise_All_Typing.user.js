@@ -4,7 +4,7 @@
 // @description    All typing / no multiple choice when doing Memrise typing courses
 // @match          https://www.memrise.com/course/*/garden/*
 // @match          https://www.memrise.com/garden/review/*
-// @version        0.1.5
+// @version        0.1.6
 // @updateURL      https://github.com/cooljingle/memrise-all-typing/raw/master/Memrise_All_Typing.user.js
 // @downloadURL    https://github.com/cooljingle/memrise-all-typing/raw/master/Memrise_All_Typing.user.js
 // @grant          none
@@ -54,9 +54,14 @@ $(document).ready(function() {
                                     <em style='font-size:85%'>enables typing even if typing was disabled due to <ul><li>course column set to no typing, or </li><li>official Memrise course and text > 15 characters</li></ul></em>
                                 </div>
                                 <div>
-                                    <input class='all-typing-setting' id='include-tapping' type='checkbox'>
-                                    <label for='include-tapping'>Include Tapping</label>
-                                    <em style='font-size:85%'>tapping tests will be converted to typing along with multiple choice</em>
+                                    <input class='all-typing-setting' id='replace-tapping' type='checkbox'>
+                                    <label for='replace-tapping'>Replace Tapping</label>
+                                    <em style='font-size:85%'>tapping tests will be converted to typing (along with multiple choice)</em>
+                                </div>
+                                <div>
+                                    <input class='all-typing-setting' id='replace-audio-multiple-choice' type='checkbox'>
+                                    <label for='replace-audio-multiple-choice'>Replace Audio Multiple Choice</label>
+                                    <em style='font-size:85%'>audio multiple choice tests will be converted to typing (along with multiple choice)</em>
                                 </div>
                             </div>
                         </div>
@@ -137,7 +142,9 @@ $(document).ready(function() {
     }
 
     function makeMaybeTyping(box) {
-        if (box.template === "multiple_choice" || (localStorageObject["include-tapping"] !== false && box.template === "tapping")) {
+        if (box.template === "multiple_choice" ||
+            (localStorageObject["replace-tapping"] !== false && box.template === "tapping") ||
+            (localStorageObject["replace-audio-multiple-choice"] !== false && box.template === "audio-multiple-choice")) {
             var boxCopy = jQuery.extend({}, box);
             box.template = MEMRISE.garden.session.box_factory.makeMaybeTyping(boxCopy).template;
         }
