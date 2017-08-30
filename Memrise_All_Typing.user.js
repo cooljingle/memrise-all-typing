@@ -4,7 +4,7 @@
 // @description    All typing / no multiple choice when doing Memrise typing courses
 // @match          https://www.memrise.com/course/*/garden/*
 // @match          https://www.memrise.com/garden/review/*
-// @version        0.1.6
+// @version        0.1.7
 // @updateURL      https://github.com/cooljingle/memrise-all-typing/raw/master/Memrise_All_Typing.user.js
 // @downloadURL    https://github.com/cooljingle/memrise-all-typing/raw/master/Memrise_All_Typing.user.js
 // @grant          none
@@ -109,12 +109,18 @@ $(document).ready(function() {
     }
 
     function onMistakeReviews() {
-        MEMRISE.garden.boxes.add_next = (function() {
-            var cached_function = MEMRISE.garden.boxes.add_next;
+        var b = MEMRISE.garden.boxes;
+        b.add_next = overrideMistakeReviewFunc(b.add_next);
+        b.addRandomlyBeforeNextForSameItem = overrideMistakeReviewFunc(b.addRandomlyBeforeNextForSameItem);
+    }
+
+    function overrideMistakeReviewFunc(func) {
+        return (function() {
+            var cached_function = func;
             return function() {
-            if(localStorageObject["include-mistake-reviews"] !== false) {
-                makeMaybeTyping(arguments[0]);
-            }
+                if(localStorageObject["include-mistake-reviews"] !== false) {
+                    makeMaybeTyping(arguments[0]);
+                }
                 return cached_function.apply(this, arguments);
             };
         }());
