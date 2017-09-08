@@ -4,7 +4,7 @@
 // @description    All typing / no multiple choice when doing Memrise typing courses
 // @match          https://www.memrise.com/course/*/garden/*
 // @match          https://www.memrise.com/garden/review/*
-// @version        0.1.7
+// @version        0.1.8
 // @updateURL      https://github.com/cooljingle/memrise-all-typing/raw/master/Memrise_All_Typing.user.js
 // @downloadURL    https://github.com/cooljingle/memrise-all-typing/raw/master/Memrise_All_Typing.user.js
 // @grant          none
@@ -101,11 +101,16 @@ $(document).ready(function() {
     }());
 
     function onReviews() {
-        MEMRISE.garden.session.box_factory.is_lowest_rung = function() {
-            if(localStorageObject["include-reviews"] !== false) {
-                return false;
-            }
-        };
+        MEMRISE.garden.session.box_factory.is_lowest_rung = (function() {
+            var cached_function = MEMRISE.garden.session.box_factory.is_lowest_rung;
+            return function() {
+                if(localStorageObject["include-reviews"] !== false) {
+                    return false;
+                } else {
+                    return cached_function.apply(this, arguments);
+                }
+            };
+        }());
     }
 
     function onMistakeReviews() {
@@ -140,11 +145,16 @@ $(document).ready(function() {
     }
 
     function onTypingDisabled() {
-        MEMRISE.garden.session.box_factory.isTypingDisabled = function() {
-            if(localStorageObject["include-typing-disabled"] !== false) {
-                return false;
-            }
-        };
+        MEMRISE.garden.session.box_factory.isTypingDisabled = (function() {
+            var cached_function = MEMRISE.garden.session.box_factory.isTypingDisabled;
+            return function() {
+                if(localStorageObject["include-typing-disabled"] !== false) {
+                    return false;
+                } else {
+                    return cached_function.apply(this, arguments);
+                }
+            };
+        }());
     }
 
     function makeMaybeTyping(box) {
