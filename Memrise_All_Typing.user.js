@@ -4,7 +4,7 @@
 // @description    All typing / no multiple choice when doing Memrise typing courses
 // @match          https://www.memrise.com/course/*/garden/*
 // @match          https://www.memrise.com/garden/review/*
-// @version        0.1.8
+// @version        0.1.9
 // @updateURL      https://github.com/cooljingle/memrise-all-typing/raw/master/Memrise_All_Typing.user.js
 // @downloadURL    https://github.com/cooljingle/memrise-all-typing/raw/master/Memrise_All_Typing.user.js
 // @grant          none
@@ -96,7 +96,9 @@ $(document).ready(function() {
             onMistakeReviews();
             onLearning();
             onTypingDisabled();
-            return cached_function.apply(this, arguments);
+            var result = cached_function.apply(this, arguments);
+            populateLearnables();
+            return result;
         };
     }());
 
@@ -145,11 +147,11 @@ $(document).ready(function() {
     }
 
     function onTypingDisabled() {
-        MEMRISE.garden.session.box_factory.isTypingDisabled = (function() {
-            var cached_function = MEMRISE.garden.session.box_factory.isTypingDisabled;
+        MEMRISE.garden.session.box_factory.isTypingPossible = (function() {
+            var cached_function = MEMRISE.garden.session.box_factory.isTypingPossible;
             return function() {
                 if(localStorageObject["include-typing-disabled"] !== false) {
-                    return false;
+                    return true;
                 } else {
                     return cached_function.apply(this, arguments);
                 }
@@ -159,6 +161,7 @@ $(document).ready(function() {
 
     function makeMaybeTyping(box) {
         if (box.template === "multiple_choice" ||
+            box.template === "reversed_multiple_choice" ||
             (localStorageObject["replace-tapping"] !== false && box.template === "tapping") ||
             (localStorageObject["replace-audio-multiple-choice"] !== false && box.template === "audio-multiple-choice")) {
             var boxCopy = jQuery.extend({}, box);
@@ -166,4 +169,19 @@ $(document).ready(function() {
         }
     }
 
+    function populateLearnables() {
+        _.each(MEMRISE.garden.learnables, function(v, k) {
+            if(!_.contains(Object.keys(v.tests), "typing")){
+                v.tests.typing = {
+                    prompt: {
+                        text: v.definition.value,
+                        audio: v.audios
+                    },
+                    correct: v.item.value,
+                    choices: "\u00e1\u00e9\u00ed\u00f3\u00fa\u00f1\u00fc\u00a1\u00bf",
+                    accepted: v.item.alternatives.concat(v.item.value)
+                };
+            }
+        });
+    }
 });
