@@ -4,7 +4,7 @@
 // @description    All typing / no multiple choice when doing Memrise typing courses
 // @match          https://www.memrise.com/course/*/garden/*
 // @match          https://www.memrise.com/garden/review/*
-// @version        0.1.9
+// @version        0.1.10
 // @updateURL      https://github.com/cooljingle/memrise-all-typing/raw/master/Memrise_All_Typing.user.js
 // @downloadURL    https://github.com/cooljingle/memrise-all-typing/raw/master/Memrise_All_Typing.user.js
 // @grant          none
@@ -175,11 +175,11 @@ $(document).ready(function() {
                 v.tests.typing = {
                     prompt: {
                         text: v.definition.value,
-                        audio: v.audios
+                        //audio: v.audios
                     },
                     correct: v.item.value,
-                    choices: "\u00e1\u00e9\u00ed\u00f3\u00fa\u00f1\u00fc\u00a1\u00bf",
-                    accepted: v.item.alternatives.concat(v.item.value)
+                    choices: "",
+                    accepted: _.map(v.item.alternatives.concat(v.item.value), function(x) {return x.replace(/[\u2000-\u206F\u2E00-\u2E7F\\'!"#$%&()*+,\-.\/:;<=>?@\[\]^_`{|}~¿¡]/g, "");}) //strip punctuation
                 };
             }
         });
