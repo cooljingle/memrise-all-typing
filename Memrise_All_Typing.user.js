@@ -4,7 +4,7 @@
 // @description    All typing / no multiple choice when doing Memrise typing courses
 // @match          https://www.memrise.com/course/*/garden/*
 // @match          https://www.memrise.com/garden/review/*
-// @version        0.1.10
+// @version        0.1.11
 // @updateURL      https://github.com/cooljingle/memrise-all-typing/raw/master/Memrise_All_Typing.user.js
 // @downloadURL    https://github.com/cooljingle/memrise-all-typing/raw/master/Memrise_All_Typing.user.js
 // @grant          none
@@ -179,7 +179,10 @@ $(document).ready(function() {
                     },
                     correct: v.item.value,
                     choices: "",
-                    accepted: _.map(v.item.alternatives.concat(v.item.value), function(x) {return x.replace(/[\u2000-\u206F\u2E00-\u2E7F\\'!"#$%&()*+,\-.\/:;<=>?@\[\]^_`{|}~¿¡]/g, "");}) //strip punctuation
+                    accepted: _.map(v.item.alternatives.concat(v.item.value), function(x) {
+                        return x.replace(/[\u2000-\u206F\u2E00-\u2E7F\\'!"#$%&()*+,\-.\/:;<=>?@\[\]^_`{|}~¿¡]/g, "") //strip punctuation
+                            .toLowerCase(); //lowercase required
+                    })
                 };
             }
         });
