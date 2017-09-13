@@ -4,7 +4,7 @@
 // @description    All typing / no multiple choice when doing Memrise typing courses
 // @match          https://www.memrise.com/course/*/garden/*
 // @match          https://www.memrise.com/garden/review/*
-// @version        0.1.12
+// @version        0.1.13
 // @updateURL      https://github.com/cooljingle/memrise-all-typing/raw/master/Memrise_All_Typing.user.js
 // @downloadURL    https://github.com/cooljingle/memrise-all-typing/raw/master/Memrise_All_Typing.user.js
 // @grant          none
@@ -174,13 +174,12 @@ $(document).ready(function() {
             if(!_.contains(Object.keys(v.tests), "typing")){
                 v.tests.typing = {
                     prompt: {
-                        text: v.definition.value,
-                        //audio: v.audios
+                        [v.definition.kind]: v.definition.value,
                     },
                     correct: v.item.value,
                     choices: "",
                     accepted: _.map(v.item.alternatives.concat(v.item.value), function(x) {
-                        return x.replace(/[\u2000-\u206F\u2E00-\u2E7F\\'!"#$%&()*+,\-.\/:;<=>?@\[\]^_`{|}~¿¡]/g, "") //strip punctuation
+                        return x.replace(/[\u3000-\u303F\u2000-\u206F\u2E00-\u2E7F\\'!"#$%&()*+,\-.\/:;<=>?@\[\]^_`{|}~¿¡]/g, "") //strip punctuation
                             .trim() // trim spaces at beginning and end
                             .toLowerCase(); //lowercase required
                     })
