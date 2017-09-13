@@ -180,7 +180,8 @@ $(document).ready(function() {
                     correct: v.item.value,
                     choices: "",
                     accepted: _.map(v.item.alternatives.concat(v.item.value), function(x) {
-                        return x.replace(/[\u2000-\u206F\u2E00-\u2E7F\\'!"#$%&()*+,\-.\/:;<=>?@\[\]^_`{|}~¿¡]|\s\./g, ""); //strip punctuation
+                        return x.replace(/[\u2000-\u206F\u2E00-\u2E7F\\'!"#$%&()*+,\-.\/:;<=>?@\[\]^_`{|}~¿¡]/g, ""); //strip punctuation
+                            .trim() // trim spaces at beginning and end
                             .toLowerCase(); //lowercase required
                     })
                 };
