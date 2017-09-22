@@ -4,7 +4,7 @@
 // @description    All typing / no multiple choice when doing Memrise typing courses
 // @match          https://www.memrise.com/course/*/garden/*
 // @match          https://www.memrise.com/garden/review/*
-// @version        0.1.17
+// @version        0.1.18
 // @updateURL      https://github.com/cooljingle/memrise-all-typing/raw/master/Memrise_All_Typing.user.js
 // @downloadURL    https://github.com/cooljingle/memrise-all-typing/raw/master/Memrise_All_Typing.user.js
 // @grant          none
@@ -97,7 +97,7 @@ $(document).ready(function() {
             onLearning();
             onTypingDisabled();
             var result = cached_function.apply(this, arguments);
-            populateLearnables();
+            MEMRISE.garden.populateLearnables();
             return result;
         };
     }());
@@ -169,7 +169,7 @@ $(document).ready(function() {
         }
     }
 
-    function populateLearnables() {
+    MEMRISE.garden.populateLearnables = function() {
         _.each(MEMRISE.garden.learnables, function(v, k) {
             if(!_.contains(Object.keys(v.tests), "typing")){
                 v.tests.typing = {
@@ -190,5 +190,5 @@ $(document).ready(function() {
                 };
             }
         });
-    }
+    };
 });
