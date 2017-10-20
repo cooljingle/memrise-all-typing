@@ -4,7 +4,7 @@
 // @description    All typing / no multiple choice when doing Memrise typing courses
 // @match          https://www.memrise.com/course/*/garden/*
 // @match          https://www.memrise.com/garden/review/*
-// @version        0.1.21
+// @version        0.1.22
 // @updateURL      https://github.com/cooljingle/memrise-all-typing/raw/master/Memrise_All_Typing.user.js
 // @downloadURL    https://github.com/cooljingle/memrise-all-typing/raw/master/Memrise_All_Typing.user.js
 // @grant          none
@@ -97,7 +97,7 @@ $(document).ready(function() {
             onLearning();
             onTypingDisabled();
             var result = cached_function.apply(this, arguments);
-            MEMRISE.garden.populateLearnables();
+            MEMRISE.garden.populateScreens();
             return result;
         };
     }());
@@ -169,16 +169,17 @@ $(document).ready(function() {
         }
     }
 
-    MEMRISE.garden.populateLearnables = function() {
+    MEMRISE.garden.populateScreens = function() {
         _.each(MEMRISE.garden.learnables, function(v, k) {
-            if(!_.contains(Object.keys(v.tests), "typing")){
-                v.tests.typing = {
+            var learnableScreens = MEMRISE.garden.screens[k];
+            if(learnableScreens && !_.contains(Object.keys(learnableScreens), "typing")){
+                learnableScreens.typing = {
                     prompt: {
                         [v.definition.kind]: v.definition.value,
                     },
                     correct: v.item.value,
                     choices: "",
-                    accepted: _.uniq(_.flatten(_.map([v.item.value, ...v.item.alternatives, ...(v.tests.tapping ? _.map(v.tests.tapping.accepted, t => t.join(" ")) : [])], function(y) {
+                    accepted: _.uniq(_.flatten(_.map([v.item.value, ...v.item.alternatives, ...(learnableScreens.tapping ? _.map(learnableScreens.tapping.accepted, t => t.join(" ")) : [])], function(y) {
                         return _.isArray(y) ? y : [y, _.map([..._.compact(y.split(/[();]+/)), y], function(x) { //bracket/semicolon delimitation
                             return x.replace(/[\u3000-\u303F\u2000-\u206F\u2E00-\u2E7F\\'!"#$%&()*+,\-\/:;<=>?@\[\]^_`{|}~¿¡]/g, "") //strip punctuation
                                 .replace(/[\u00a0\u00A0]/g, " ") //sinister no-break spaces!
