@@ -4,7 +4,7 @@
 // @description    All typing / no multiple choice when doing Memrise typing courses
 // @match          https://www.memrise.com/course/*/garden/*
 // @match          https://www.memrise.com/garden/review/*
-// @version        0.1.22
+// @version        0.1.23
 // @updateURL      https://github.com/cooljingle/memrise-all-typing/raw/master/Memrise_All_Typing.user.js
 // @downloadURL    https://github.com/cooljingle/memrise-all-typing/raw/master/Memrise_All_Typing.user.js
 // @grant          none
@@ -175,6 +175,7 @@ $(document).ready(function() {
             if(learnableScreens && !_.contains(Object.keys(learnableScreens), "typing")){
                 learnableScreens.typing = {
                     prompt: {
+                        audio: v.audios,
                         [v.definition.kind]: v.definition.value,
                     },
                     correct: v.item.value,
