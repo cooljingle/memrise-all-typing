@@ -4,7 +4,7 @@
 // @description    All typing / no multiple choice when doing Memrise typing courses
 // @match          https://www.memrise.com/course/*/garden/*
 // @match          https://www.memrise.com/garden/review/*
-// @version        0.1.24
+// @version        0.1.25
 // @updateURL      https://github.com/cooljingle/memrise-all-typing/raw/master/Memrise_All_Typing.user.js
 // @downloadURL    https://github.com/cooljingle/memrise-all-typing/raw/master/Memrise_All_Typing.user.js
 // @grant          none
@@ -173,20 +173,23 @@ $(document).ready(function() {
         _.each(MEMRISE.garden.learnables, function(v, k) {
             var learnableScreens = MEMRISE.garden.screens[k];
             if(learnableScreens && !_.contains(Object.keys(learnableScreens), "typing")) {
-                learnableScreens.typing = $.extend({}, learnableScreens.multiple_choice, {
-                    template: "typing",
-                    choices: "",
-                    correct: _.uniq(_.flatten(_.map([v.item.value, ...v.item.alternatives, ...(learnableScreens.tapping ? _.map(learnableScreens.tapping.accepted, t => t.join(" ")) : [])], function(y) {
-                        return _.isArray(y) ? y : [y, _.map([..._.compact(y.split(/[();]+/)), y], function(x) { //bracket/semicolon delimitation
-                            return x.replace(/[\u3000-\u303F\u2000-\u206F\u2E00-\u2E7F\\'!"#$%&()*+,\-\/:;<=>?@\[\]^_`{|}~¿¡]/g, "") //strip punctuation
-                                .replace(/[\u00a0\u00A0]/g, " ") //sinister no-break spaces!
-                                .replace(/\./g, " ") //full stops are treated like spaces to memrise
-                                .replace(/\s{2,}/g, " ") //clear multiple spaces (e.g. from "a ... b")
-                                .trim() // trim spaces at beginning and end
-                                .toLowerCase(); //lowercase required
-                        })];
-                    })))
-                });
+                var screenBase = _.find([learnableScreens.multiple_choice, learnableScreens.reversed_multiple_choice], s => s.answer.kind === "text");
+                if(screenBase) {
+                    learnableScreens.typing = $.extend({}, screenBase, {
+                        template: "typing",
+                        choices: "",
+                        correct: _.uniq(_.flatten(_.map([v.item.value, ...v.item.alternatives, ...(learnableScreens.tapping ? _.map(learnableScreens.tapping.accepted, t => t.join(" ")) : [])], function(y) {
+                            return _.isArray(y) ? y : [y, _.map([..._.compact(y.split(/[();]+/)), y], function(x) { //bracket/semicolon delimitation
+                                return x.replace(/[\u3000-\u303F\u2000-\u206F\u2E00-\u2E7F\\'!"#$%&()*+,\-\/:;<=>?@\[\]^_`{|}~¿¡]/g, "") //strip punctuation
+                                    .replace(/[\u00a0\u00A0]/g, " ") //sinister no-break spaces!
+                                    .replace(/\./g, " ") //full stops are treated like spaces to memrise
+                                    .replace(/\s{2,}/g, " ") //clear multiple spaces (e.g. from "a ... b")
+                                    .trim() // trim spaces at beginning and end
+                                    .toLowerCase(); //lowercase required
+                            })];
+                        })))
+                    });
+                }
             }
         });
     };
