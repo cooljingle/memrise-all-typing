@@ -4,7 +4,7 @@
 // @description    All typing / no multiple choice when doing Memrise typing courses
 // @match          https://www.memrise.com/course/*/garden/*
 // @match          https://www.memrise.com/garden/review/*
-// @version        0.1.25
+// @version        0.1.26
 // @updateURL      https://github.com/cooljingle/memrise-all-typing/raw/master/Memrise_All_Typing.user.js
 // @downloadURL    https://github.com/cooljingle/memrise-all-typing/raw/master/Memrise_All_Typing.user.js
 // @grant          none
@@ -174,11 +174,12 @@ $(document).ready(function() {
             var learnableScreens = MEMRISE.garden.screens[k];
             if(learnableScreens && !_.contains(Object.keys(learnableScreens), "typing")) {
                 var screenBase = _.find([learnableScreens.multiple_choice, learnableScreens.reversed_multiple_choice], s => s.answer.kind === "text");
+                var column = _.find([v.item, v.definition], c => c.kind === "text");
                 if(screenBase) {
                     learnableScreens.typing = $.extend({}, screenBase, {
                         template: "typing",
                         choices: "",
-                        correct: _.uniq(_.flatten(_.map([v.item.value, ...v.item.alternatives, ...(learnableScreens.tapping ? _.map(learnableScreens.tapping.accepted, t => t.join(" ")) : [])], function(y) {
+                        correct: _.uniq(_.flatten(_.map([column.value, ...column.alternatives, ...(learnableScreens.tapping ? _.map(learnableScreens.tapping.correct, t => t.join(" ")) : [])], function(y) {
                             return _.isArray(y) ? y : [y, _.map([..._.compact(y.split(/[();]+/)), y], function(x) { //bracket/semicolon delimitation
                                 return x.replace(/[\u3000-\u303F\u2000-\u206F\u2E00-\u2E7F\\'!"#$%&()*+,\-\/:;<=>?@\[\]^_`{|}~¿¡]/g, "") //strip punctuation
                                     .replace(/[\u00a0\u00A0]/g, " ") //sinister no-break spaces!
