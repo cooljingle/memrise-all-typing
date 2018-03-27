@@ -4,7 +4,7 @@
 // @description    All typing / no multiple choice when doing Memrise typing courses
 // @match          https://www.memrise.com/course/*/garden/*
 // @match          https://www.memrise.com/garden/review/*
-// @version        0.1.27
+// @version        0.1.28
 // @updateURL      https://github.com/cooljingle/memrise-all-typing/raw/master/Memrise_All_Typing.user.js
 // @downloadURL    https://github.com/cooljingle/memrise-all-typing/raw/master/Memrise_All_Typing.user.js
 // @grant          none
@@ -83,8 +83,8 @@ $(document).ready(function() {
         var cached_function = MEMRISE.garden.session_start;
         return function() {
             addTypingOverrides();
-            var result = cached_function.apply(this, arguments);
             MEMRISE.garden.populateScreens();
+            var result = cached_function.apply(this, arguments);
             return result;
         };
     }());
@@ -117,8 +117,8 @@ $(document).ready(function() {
     }
 
     MEMRISE.garden.populateScreens = function() {
-        _.each(MEMRISE.garden.learnables, function(v, k) {
-            var learnableScreens = MEMRISE.garden.screens[k];
+        _.each(MEMRISE.garden.learnables || _.indexBy(MEMRISE.garden.session_data.learnables, 'learnable_id'), function(v, k) {
+            var learnableScreens = (MEMRISE.garden.screens || MEMRISE.garden.session_data.screens)[k];
             if(learnableScreens && !_.contains(Object.keys(learnableScreens), "typing")) {
                 var screenBase = _.find([learnableScreens.multiple_choice, learnableScreens.reversed_multiple_choice], s => s.answer.kind === "text");
                 var column = _.find([v.item, v.definition], c => c.kind === "text");
