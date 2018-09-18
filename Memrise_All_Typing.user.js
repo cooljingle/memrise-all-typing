@@ -4,7 +4,7 @@
 // @description    All typing / no multiple choice when doing Memrise typing courses
 // @match          https://www.memrise.com/course/*/garden/*
 // @match          https://www.memrise.com/garden/review/*
-// @version        0.1.31
+// @version        0.1.32
 // @updateURL      https://github.com/cooljingle/memrise-all-typing/raw/master/Memrise_All_Typing.user.js
 // @downloadURL    https://github.com/cooljingle/memrise-all-typing/raw/master/Memrise_All_Typing.user.js
 // @grant          none
@@ -118,8 +118,7 @@ $(document).ready(function() {
                 var screenBase = _.find([learnableScreens.multiple_choice, learnableScreens.reversed_multiple_choice], s => s.answer.kind === "text");
                 var column = _.find([v.item, v.definition], c => c.kind === "text");
                 if(screenBase) {
-                    var screenIndex = Number(_.last(Object.keys(learnableScreensNew))) + 1;
-                    learnableScreensNew[screenIndex] = $.extend({}, screenBase, {
+                    var typingScreen = $.extend({}, screenBase, {
                         template: "typing",
                         choices: "",
                         correct: _.uniq(_.flatten(_.map([column.value, ...column.alternatives, ...(learnableScreens.tapping ? _.map(learnableScreens.tapping.correct, t => t.join(" ")) : [])], function(y) {
@@ -133,6 +132,9 @@ $(document).ready(function() {
                             })];
                         })))
                     });
+                    var screenIndex = Number(_.last(Object.keys(learnableScreensNew))) + 1;
+                    learnableScreensNew[screenIndex] = typingScreen;
+                    MEMRISE.garden.screen_template_map[k].typing = [typingScreen];
                 }
             }
         });
