@@ -1,6 +1,6 @@
 # Memrise All Typing
 
-This userscript prevents multiple choice from occuring in typing courses on Memrise, replacing it with a typing prompt.
+This userscript prevents multiple choice from occuring in typing courses on Memrise and Decks by Memrise, replacing it with a typing prompt.
 
 ### Installation
 
