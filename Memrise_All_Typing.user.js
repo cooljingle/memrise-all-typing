@@ -6,7 +6,7 @@
 // @match          https://www.memrise.com/garden/review/*
 // @match          https://decks.memrise.com/course/*/garden/*
 // @match          https://decks.memrise.com/garden/review/*
-// @version        0.1.32
+// @version        0.2.0
 // @updateURL      https://github.com/cooljingle/memrise-all-typing/raw/master/Memrise_All_Typing.user.js
 // @downloadURL    https://github.com/cooljingle/memrise-all-typing/raw/master/Memrise_All_Typing.user.js
 // @grant          none
