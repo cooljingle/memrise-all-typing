@@ -4,6 +4,8 @@
 // @description    All typing / no multiple choice when doing Memrise typing courses
 // @match          https://www.memrise.com/course/*/garden/*
 // @match          https://www.memrise.com/garden/review/*
+// @match          https://app.memrise.com/course/*/garden/*
+// @match          https://app.memrise.com/garden/review/*
 // @match          https://decks.memrise.com/course/*/garden/*
 // @match          https://decks.memrise.com/garden/review/*
 // @version        0.2.0
